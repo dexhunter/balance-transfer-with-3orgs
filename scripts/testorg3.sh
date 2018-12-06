@@ -18,7 +18,7 @@ echo "\___ \    | |     / _ \   | |_) |   | |  "
 echo " ___) |   | |    / ___ \  |  _ <    | |  "
 echo "|____/    |_|   /_/   \_\ |_| \_\   |_|  "
 echo
-echo "Extend your first network (EYFN) test"
+echo "Extend balance-transfer network test"
 echo
 CHANNEL_NAME="$1"
 DELAY="$2"
@@ -65,7 +65,7 @@ chaincodeQuery 0 1 80
 
 
 echo
-echo "========= All GOOD, EYFN test execution completed =========== "
+echo "========= All GOOD, test execution completed =========== "
 echo
 
 echo

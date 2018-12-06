@@ -12,7 +12,7 @@
 #
 
 echo
-echo "========= Getting Org3 on to your first network ========= "
+echo "========= Getting Org3 on to balance-transfer network ========= "
 echo
 CHANNEL_NAME="$1"
 DELAY="$2"
@@ -52,7 +52,7 @@ echo "Installing chaincode 2.0 on peer0.org3..."
 installChaincode 0 3 2.0
 
 echo
-echo "========= Org3 is now halfway onto your first network ========= "
+echo "========= Org3 is now halfway onto balance-transfer network ========= "
 echo
 
 exit 0

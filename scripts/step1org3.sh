@@ -37,8 +37,9 @@ echo
 echo "========= Creating config transaction to add org3 to network =========== "
 echo
 
+# for debian system, can skip
 echo "Installing jq"
-# apt-get -y update && apt-get -y install jq
+apt-get -y update && apt-get -y install jq
 
 # Fetch the config for the channel, writing it to config.json
 fetchChannelConfig ${CHANNEL_NAME} config.json
