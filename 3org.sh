@@ -97,7 +97,7 @@ function networkUp () {
   if [ "${IF_COUCHDB}" == "couchdb" ]; then
       IMAGE_TAG=${IMAGETAG} docker-compose -f $COMPOSE_FILE_ORG3 -f $COMPOSE_FILE_COUCH_ORG3 up -d 2>&1
   else
-      IMAGE_TAG=$IMAGETAG docker-compose -f $COMPOSE_FILE_ORG3 up -d 2>&1
+      IMAGE_TAG=$IMAGETAG docker-compose -f artifacts/$COMPOSE_FILE_ORG3 up -d 2>&1
   fi
   if [ $? -ne 0 ]; then
     echo "ERROR !!!! Unable to start Org3 network"
@@ -139,9 +139,9 @@ function networkDown () {
     #Cleanup images
     removeUnwantedImages
     # remove orderer block and other channel configuration transactions and certs
-    rm -rf channel-artifacts/*.block channel-artifacts/*.tx crypto-config ./org3-artifacts/crypto-config/ channel-artifacts/org3.json
-    # remove the docker-compose yaml file that was customized to the example
-    rm -f docker-compose-e2e.yaml
+    rm -rf channel-artifacts/*.block channel-artifacts/*.tx artifacts/org3-artifacts/crypto-config/ artifacts/org3-artifacts/org3.json
+    # # remove the docker-compose yaml file that was customized to the example
+    # rm -f docker-compose-e2e.yaml
   fi
 }
 
@@ -152,6 +152,7 @@ function createConfigTx () {
   echo "###############################################################"
   echo "####### Generate and submit config tx to add Org3 #############"
   echo "###############################################################"
+  echo $PWD
   docker exec cli scripts/step1org3.sh $CHANNEL_NAME $CLI_DELAY $LANGUAGE $CLI_TIMEOUT $VERBOSE
   if [ $? -ne 0 ]; then
     echo "ERROR !!!! Unable to create config tx"
@@ -177,6 +178,7 @@ function generateCerts (){
 
   (cd artifacts/org3-artifacts
    set -x
+   echo $PWD
    cryptogen generate --config=./org3-crypto.yaml
    res=$?
    set +x
@@ -209,18 +211,20 @@ function generateChannelArtifacts() {
      exit 1
    fi
   )
-  cp -r crypto-config/ordererOrganizations org3-artifacts/crypto-config/
+  cp -r artifacts/channel/crypto-config/ordererOrganizations artifacts/org3-artifacts/crypto-config/
   echo
 }
 
 
-# If BYFN wasn't run abort
-if [ ! -d crypto-config ]; then
-  echo
-  echo "ERROR: Please, run byfn.sh first."
-  echo
-  exit 1
-fi
+## If BYFN wasn't run abort
+#if [ ! -d crypto-config ]; then
+#  echo
+#  echo "ERROR: Please, run byfn.sh first."
+#  echo $PWD
+#  echo $FABRIC_CFG_PATH
+#  echo
+#  exit 1
+#fi
 
 # Obtain the OS and Architecture string that will be used to select the correct
 # native binaries for your platform
