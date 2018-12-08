@@ -131,7 +131,7 @@ function networkUp () {
 
 # Tear down running network
 function networkDown () {
-  docker-compose -f $COMPOSE_FILE -f $COMPOSE_FILE_ORG3 -f $COMPOSE_FILE_COUCH down --volumes --remove-orphans
+  docker-compose -f artifacts/$COMPOSE_FILE -f artifacts/$COMPOSE_FILE_ORG3 -f artifacts/$COMPOSE_FILE_COUCH down --volumes --remove-orphans
   # Don't remove containers, images, etc if restarting
   if [ "$MODE" != "restart" ]; then
     #Cleanup the chaincode containers
@@ -152,8 +152,7 @@ function createConfigTx () {
   echo "###############################################################"
   echo "####### Generate and submit config tx to add Org3 #############"
   echo "###############################################################"
-  echo $PWD
-  docker exec cli scripts/step1org3.sh $CHANNEL_NAME $CLI_DELAY $LANGUAGE $CLI_TIMEOUT $VERBOSE
+  docker exec -it cli scripts/step1org3.sh $CHANNEL_NAME $CLI_DELAY $LANGUAGE $CLI_TIMEOUT $VERBOSE
   if [ $? -ne 0 ]; then
     echo "ERROR !!!! Unable to create config tx"
     exit 1
@@ -203,7 +202,7 @@ function generateChannelArtifacts() {
   (cd artifacts/org3-artifacts
    export FABRIC_CFG_PATH=$PWD
    set -x
-   configtxgen -printOrg Org3MSP > ../channel-artifacts/org3.json
+   configtxgen -printOrg Org3MSP > org3.json
    res=$?
    set +x
    if [ $res -ne 0 ]; then
